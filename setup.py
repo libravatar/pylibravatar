@@ -10,6 +10,7 @@ setup(
     py_modules = ['libravatar'],
     license = 'MIT',
     keywords = ['libravatar', 'avatars', 'autonomous', 'social', 'federated'],
+    requires = ['pydns'],
     classifiers = [
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
