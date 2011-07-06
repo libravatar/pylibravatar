@@ -25,6 +25,7 @@ IN THE SOFTWARE.
 import DNS
 from hashlib import md5, sha256
 import random
+import re
 import urllib
 from urlparse import urlsplit, urlunsplit
 
@@ -123,12 +124,27 @@ def lookup_avatar_server(domain, https):
 
         records.append(srv_record)
 
-    target, port = srv_hostname(records)
+    target, port = sanitize_target(srv_hostname(records))
 
     if target and ((https and port != 443) or (not https and port != 80)):
         return "%s:%s" % (target, port)
 
     return target
+
+def sanitize_target(args):
+    """
+    Ensure we are getting a (mostly) valid hostname and port number
+    from the DNS resolver.
+    """
+    target, port = args
+
+    if not re.match('^[0-9a-zA-Z\-.]+$', target):
+        return (None, None)
+
+    if port < 1 or port > 65535:
+        return (None, None)
+
+    return (target, port)
 
 def srv_hostname(records):
     """
