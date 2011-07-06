@@ -25,9 +25,9 @@ setup(
 PyLibravatar is an easy way to make use of the federated `Libravatar`_
 avatar hosting service from within your Python applications.
 
-See the `project page`_ for the bug tracker and downloads.
+See the `project page`_ to file bugs or ask questions.
 
-.. _Libravatar: http://www.libravatar.org/
+.. _Libravatar: https://www.libravatar.org/
 .. _project page: https://launchpad.net/pylibravatar
 """
     )
