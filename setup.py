@@ -13,7 +13,6 @@ setup(
     requires = ['pydns'],
     classifiers = [
         "Programming Language :: Python",
-        "Programming Language :: Python :: 3",
         "Development Status :: 4 - Beta",
         "Environment :: Web Environment",
         "Intended Audience :: Developers",
