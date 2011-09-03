@@ -1,4 +1,5 @@
 test: lint
+	nosetests tests/*.py
 
 clean:
 	rm -rf dist/ MANIFEST
