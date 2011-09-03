@@ -59,7 +59,7 @@ def libravatar_url(email = None, openid = None, https = False,
     # Process optional parameters
     query_string = ''
     if default:
-        query_string = '?d=%s' % urllib.quote(default)
+        query_string = '?d=%s' % urllib.quote_plus(default)
     if size:
         if len(query_string) > 0:
             query_string += '&'
@@ -138,7 +138,7 @@ def sanitize_target(args):
     """
     target, port = args
 
-    if not re.match('^[0-9a-zA-Z\-.]+$', target):
+    if not target or not re.match('^[0-9a-zA-Z\-.]+$', target):
         return (None, None)
 
     if port < 1 or port > 65535:
