@@ -138,10 +138,16 @@ def sanitize_target(args):
     """
     target, port = args
 
-    if not target or not re.match('^[0-9a-zA-Z\-.]+$', target):
+    if not target or not port:
         return (None, None)
 
-    if port < 1 or port > 65535:
+    if not re.match('^[0-9a-zA-Z\-.]+$', target):
+        return (None, None)
+
+    try:
+        if int(port) < 1 or int(port) > 65535:
+            return (None, None)
+    except ValueError:
         return (None, None)
 
     return (target, port)
