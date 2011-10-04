@@ -1,4 +1,4 @@
-test: lint
+test: pyflakes lint
 	nosetests tests/*.py
 
 clean:
@@ -6,6 +6,9 @@ clean:
 
 dist: test
 	python setup.py sdist
+
+pyflakes:
+	pyflakes libravatar.py
 
 lint:
 	pylint --reports=no libravatar.py
