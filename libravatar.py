@@ -29,13 +29,14 @@ import re
 import urllib
 from urlparse import urlsplit, urlunsplit
 
-BASE_URL        = 'http://cdn.libravatar.org/avatar/'
+BASE_URL = 'http://cdn.libravatar.org/avatar/'
 SECURE_BASE_URL = 'https://seccdn.libravatar.org/avatar/'
 MIN_AVATAR_SIZE = 1
 MAX_AVATAR_SIZE = 512
 
-def libravatar_url(email = None, openid = None, https = False,
-                   default = None, size = None):
+
+def libravatar_url(email=None, openid=None, https=False,
+                   default=None, size=None):
     """
     Return a URL to the appropriate avatar
     """
@@ -53,7 +54,7 @@ def libravatar_url(email = None, openid = None, https = False,
         domain = url.netloc
         avatar_hash = sha256(lowercase_value).hexdigest()
 
-    if not avatar_hash: # email and openid both missing
+    if not avatar_hash:  # email and openid both missing
         return None
 
     # Process optional parameters
@@ -80,6 +81,7 @@ def libravatar_url(email = None, openid = None, https = False,
             base_url = "http://%s/avatar/" % delegation_server
 
     return base_url + avatar_hash + query_string
+
 
 def lookup_avatar_server(domain, https):
     """
@@ -131,6 +133,7 @@ def lookup_avatar_server(domain, https):
 
     return target
 
+
 def sanitize_target(args):
     """
     Ensure we are getting a (mostly) valid hostname and port number
@@ -152,6 +155,7 @@ def sanitize_target(args):
 
     return (target, port)
 
+
 def srv_hostname(records):
     """
     Return the right (target, port) pair from a list of SRV records.
@@ -167,7 +171,7 @@ def srv_hostname(records):
     # Keep only the servers in the top priority
     priority_records = []
     total_weight = 0
-    top_priority = records[0]['priority'] # highest priority = lowest number
+    top_priority = records[0]['priority']  # highest priority = lowest number
 
     for srv_record in records:
         if srv_record['priority'] > top_priority:
