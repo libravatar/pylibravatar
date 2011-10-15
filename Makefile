@@ -1,4 +1,4 @@
-test: pyflakes lint
+test: pep8 pyflakes lint
 	nosetests tests/*.py
 
 clean:
@@ -6,6 +6,9 @@ clean:
 
 dist: test
 	python setup.py sdist
+
+pep8:
+	pep8 libravatar.py
 
 pyflakes:
 	pyflakes libravatar.py
