@@ -23,7 +23,7 @@ IN THE SOFTWARE.
 """
 
 import DNS
-from hashlib import md5, sha256
+import hashlib
 import random
 import re
 import urllib
@@ -41,21 +41,24 @@ def libravatar_url(email=None, openid=None, https=False,
     Return a URL to the appropriate avatar
     """
 
-    avatar_hash = None
+    hash_obj = None
     if email:
         lowercase_value = email.strip().lower()
         domain = email.split('@')[-1]
-        avatar_hash = md5(lowercase_value).hexdigest()
+        hash_obj = hashlib.new('md5')
     elif openid:
         # pylint: disable=E1103
         url = urlsplit(openid.strip())
         lowercase_value = urlunsplit((url.scheme.lower(), url.netloc.lower(),
                                       url.path, url.query, url.fragment))
         domain = url.netloc
-        avatar_hash = sha256(lowercase_value).hexdigest()
+        hash_obj = hashlib.new('sha256')
 
-    if not avatar_hash:  # email and openid both missing
+    if not hash_obj:  # email and openid both missing
         return None
+
+    hash_obj.update(lowercase_value)
+    avatar_hash = hash_obj.hexdigest()
 
     # Process optional parameters
     query_string = ''
