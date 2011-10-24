@@ -1,6 +1,6 @@
 from nose.tools import eq_
 
-from libravatar import libravatar_url, compose_avatar_url, parse_user_identity
+from libravatar import libravatar_url, compose_avatar_url, parse_user_identity, parse_options
 
 COMMON_HASH  = 'a60fc0828e808b9a6a9d50f1792240c8'
 COMMON_EMAIL = 'whatever@wherever.whichever'
@@ -88,3 +88,25 @@ def test_user_identity():
         ('63a836cc2f35d9f13d9e9aca3e5f1ea0', COMMON_DOMAIN))
     eq_(parse_user_identity(' Whatever@Wherever.whichever   ', None),
         (COMMON_HASH, COMMON_DOMAIN))
+
+def test_options():
+    eq_(parse_options(None, None), '')
+    eq_(parse_options('', 0), '')
+    eq_(parse_options('404', 80), '?d=404&s=80')
+
+    # default param
+    eq_(parse_options('mm', None), '?d=mm')
+    eq_(parse_options(404, None), '?d=404')
+    eq_(parse_options('http://example.com', None), '?d=http%3A%2F%2Fexample.com')
+    eq_(parse_options('http://example.com/An Example Page', None), '?d=http%3A%2F%2Fexample.com%2FAn+Example+Page')
+    eq_(parse_options('http://example.com/A-Title', None), '?d=http%3A%2F%2Fexample.com%2FA-Title')
+    eq_(parse_options('http://example.com/A+B#C?D=E&F=G', None), '?d=http%3A%2F%2Fexample.com%2FA%2BB%23C%3FD%3DE%26F%3DG')
+
+    # size param
+    eq_(parse_options(None, -1), '?s=1')
+    eq_(parse_options(None, 1), '?s=1')
+    eq_(parse_options(None, '79'), '?s=79')
+    eq_(parse_options(None, 512), '?s=512')
+    eq_(parse_options(None, 1000000), '?s=512')
+    eq_(parse_options(None, 'ABC'), '')
+    eq_(parse_options(None, ' '), '')

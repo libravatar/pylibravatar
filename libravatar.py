@@ -44,8 +44,18 @@ def libravatar_url(email=None, openid=None, https=False,
     """
 
     avatar_hash, domain = parse_user_identity(email, openid)
+    query_string = parse_options(default, size)
 
-    # Process optional parameters
+    delegation_server = lookup_avatar_server(domain, https)
+    return compose_avatar_url(delegation_server, avatar_hash,
+                              query_string, https)
+
+
+def parse_options(default, size):
+    """
+    Turn optional parameters into a query string.
+    """
+
     query_string = ''
     if default:
         query_string = '?d=%s' % urllib.quote_plus(str(default))
@@ -62,9 +72,7 @@ def libravatar_url(email=None, openid=None, https=False,
         query_string += 's=%s' % max(MIN_AVATAR_SIZE,
                                      min(MAX_AVATAR_SIZE, size))
 
-    delegation_server = lookup_avatar_server(domain, https)
-    return compose_avatar_url(delegation_server, avatar_hash,
-                              query_string, https)
+    return query_string
 
 
 def parse_user_identity(email, openid):
