@@ -43,6 +43,31 @@ def libravatar_url(email=None, openid=None, https=False,
     Return a URL to the appropriate avatar
     """
 
+    avatar_hash, domain = parse_user_identity(email, openid)
+
+    # Process optional parameters
+    query_string = ''
+    if default:
+        query_string = '?d=%s' % urllib.quote_plus(default)
+    if size:
+        if len(query_string) > 0:
+            query_string += '&'
+        else:
+            query_string = '?'
+        query_string += 's=%s' % max(MIN_AVATAR_SIZE,
+                                     min(MAX_AVATAR_SIZE, size))
+
+    delegation_server = lookup_avatar_server(domain, https)
+    return compose_avatar_url(delegation_server, avatar_hash,
+                              query_string, https)
+
+
+def parse_user_identity(email, openid):
+    """
+    Generate user hash based on the email address or OpenID and return
+    it along with the relevant domain.
+    """
+
     hash_obj = None
     if email:
         lowercase_value = email.strip().lower()
@@ -62,26 +87,10 @@ def libravatar_url(email=None, openid=None, https=False,
         hash_obj = hashlib.new('sha256')
 
     if not hash_obj:  # email and openid both missing
-        return None
+        return (None, None)
 
     hash_obj.update(lowercase_value)
-    avatar_hash = hash_obj.hexdigest()
-
-    # Process optional parameters
-    query_string = ''
-    if default:
-        query_string = '?d=%s' % urllib.quote_plus(default)
-    if size:
-        if len(query_string) > 0:
-            query_string += '&'
-        else:
-            query_string = '?'
-        query_string += 's=%s' % max(MIN_AVATAR_SIZE,
-                                     min(MAX_AVATAR_SIZE, size))
-
-    delegation_server = lookup_avatar_server(domain, https)
-    return compose_avatar_url(delegation_server, avatar_hash,
-                              query_string, https)
+    return (hash_obj.hexdigest(), domain)
 
 
 def compose_avatar_url(delegation_server, avatar_hash, query_string, https):

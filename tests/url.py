@@ -1,9 +1,10 @@
 from nose.tools import eq_
 
-from libravatar import libravatar_url, compose_avatar_url
+from libravatar import libravatar_url, compose_avatar_url, parse_user_identity
 
 COMMON_HASH  = 'a60fc0828e808b9a6a9d50f1792240c8'
 COMMON_EMAIL = 'whatever@wherever.whichever'
+COMMON_DOMAIN = 'wherever.whichever'
 COMMON_PREFIX_HTTP  = 'http://cdn.libravatar.org/avatar/'
 COMMON_PREFIX_HTTPS = 'https://seccdn.libravatar.org/avatar/'
 
@@ -72,3 +73,18 @@ def test_url_composition():
         'https://avatar.example.com/avatar/deadbeef?s=24')
     eq_(compose_avatar_url(None, '12345678901234567890123456789012', '?d=404', True),
         COMMON_PREFIX_HTTPS + '12345678901234567890123456789012?d=404')
+
+def test_user_identity():
+    eq_(parse_user_identity(None, None),
+        (None, None))
+    eq_(parse_user_identity(COMMON_EMAIL, None),
+        (COMMON_HASH, COMMON_DOMAIN))
+    eq_(parse_user_identity(COMMON_EMAIL, 'http://example.com/ID'),
+        (COMMON_HASH, COMMON_DOMAIN))
+
+    eq_(parse_user_identity('WHATEVER@wherever.whichever', None),
+        (COMMON_HASH, COMMON_DOMAIN))
+    eq_(parse_user_identity('Whatever@@Wherever.whichever', None),
+        ('63a836cc2f35d9f13d9e9aca3e5f1ea0', COMMON_DOMAIN))
+    eq_(parse_user_identity(' Whatever@Wherever.whichever   ', None),
+        (COMMON_HASH, COMMON_DOMAIN))

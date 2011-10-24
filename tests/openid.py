@@ -1,9 +1,10 @@
 from nose.tools import eq_
 
-from libravatar import libravatar_url
+from libravatar import libravatar_url, parse_user_identity
 
 COMMON_HASH   = 'ce0064bb30c22b618f814c389e7941ce1bfff0659910523192868d2b71632c77'
 COMMON_OPENID = 'http://example.com/id'
+COMMON_DOMAIN = 'example.com'
 COMMON_PREFIX_HTTP  = 'http://cdn.libravatar.org/avatar/'
 COMMON_PREFIX_HTTPS = 'https://seccdn.libravatar.org/avatar/'
 
@@ -33,3 +34,18 @@ def test_other_params():
         COMMON_PREFIX_HTTP + COMMON_HASH + '?d=%2Flocal.png')
     eq_(libravatar_url(openid = COMMON_OPENID, size = 150, https = True, default = 'mm'),
         COMMON_PREFIX_HTTPS + COMMON_HASH + '?d=mm&s=150')
+
+def test_user_identity():
+    eq_(parse_user_identity(None, COMMON_OPENID),
+        (COMMON_HASH, COMMON_DOMAIN))
+
+    eq_(parse_user_identity(None, 'http://example.COM/id'),
+        (COMMON_HASH, COMMON_DOMAIN))
+    eq_(parse_user_identity(None, '  HTTP://example.com/id  '),
+        (COMMON_HASH, COMMON_DOMAIN))
+    eq_(parse_user_identity(None, 'http://user:password@Example.com/id'),
+        ('e1cf8061371aa00b82c0cf0b9b1140546bc31cd4a15cb8adc84ad01823bdf71e', COMMON_DOMAIN))
+    eq_(parse_user_identity(None, 'http://User:Password@Example.com/id'),
+        ('50f60bb4c1b47fffdd6e2ce65f8bf37b65a2fb960596fa6789ef7b0044b931a2', COMMON_DOMAIN))
+    eq_(parse_user_identity(None, 'http://openid.example.COM/id'),
+        ('a108913053c4949f18d9eef7a4a68f27591297cdd7a7e2e375702aa87b6d3c05', 'openid.example.com'))
