@@ -149,7 +149,7 @@ def sanitize_target(args):
     if not target or not port:
         return (None, None)
 
-    if not re.match('^[0-9a-zA-Z\-.]+$', target):
+    if not re.match('^[0-9a-zA-Z\-.]+$', str(target)):
         return (None, None)
 
     try:
