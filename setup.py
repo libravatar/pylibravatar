@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name = 'pyLibravatar',
-    version = '1.4',
+    version = '1.5',
     description = 'Python module for Libravatar',
     author = 'Francois Marier',
     author_email = 'francois@libravatar.org',
