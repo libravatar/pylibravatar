@@ -72,11 +72,23 @@ def libravatar_url(email=None, openid=None, https=False,
         query_string += 's=%s' % max(MIN_AVATAR_SIZE,
                                      min(MAX_AVATAR_SIZE, size))
 
+    delegation_server = lookup_avatar_server(domain, https)
+    return compose_avatar_url(delegation_server, avatar_hash,
+                              query_string, https)
+
+
+def compose_avatar_url(delegation_server, avatar_hash, query_string, https):
+    """
+    Assemble the final avatar URL based on the provided components.
+    """
+
+    avatar_hash = avatar_hash or ''
+    query_string = query_string or ''
+
     base_url = BASE_URL
     if https:
         base_url = SECURE_BASE_URL
 
-    delegation_server = lookup_avatar_server(domain, https)
     if delegation_server:
         if https:
             base_url = "https://%s/avatar/" % delegation_server

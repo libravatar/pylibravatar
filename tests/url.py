@@ -1,6 +1,6 @@
 from nose.tools import eq_
 
-from libravatar import libravatar_url
+from libravatar import libravatar_url, compose_avatar_url
 
 COMMON_HASH  = 'a60fc0828e808b9a6a9d50f1792240c8'
 COMMON_EMAIL = 'whatever@wherever.whichever'
@@ -58,3 +58,17 @@ def test_size_param():
         COMMON_PREFIX_HTTP + COMMON_HASH + '?s=%s' % 512)
     eq_(libravatar_url(email = COMMON_EMAIL, size = -45),
         COMMON_PREFIX_HTTP + COMMON_HASH + '?s=%s' % 1)
+
+def test_url_composition():
+    eq_(compose_avatar_url('', '', '', False),
+        COMMON_PREFIX_HTTP)
+    eq_(compose_avatar_url(None, None, None, True),
+        COMMON_PREFIX_HTTPS)
+    eq_(compose_avatar_url('', 'deadbeef', '', False),
+        COMMON_PREFIX_HTTP + 'deadbeef')
+    eq_(compose_avatar_url('avatar.example.com', 'deadbeef', '', False),
+        'http://avatar.example.com/avatar/deadbeef')
+    eq_(compose_avatar_url('avatar.example.com', 'deadbeef', '?s=24', True),
+        'https://avatar.example.com/avatar/deadbeef?s=24')
+    eq_(compose_avatar_url(None, '12345678901234567890123456789012', '?d=404', True),
+        COMMON_PREFIX_HTTPS + '12345678901234567890123456789012?d=404')
