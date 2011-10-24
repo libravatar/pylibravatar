@@ -46,7 +46,7 @@ def libravatar_url(email=None, openid=None, https=False,
     hash_obj = None
     if email:
         lowercase_value = email.strip().lower()
-        domain = email.split('@')[-1]
+        domain = lowercase_value.split('@')[-1]
         hash_obj = hashlib.new('md5')
     elif openid:
         # pylint: disable=E1103
