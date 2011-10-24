@@ -48,8 +48,13 @@ def libravatar_url(email=None, openid=None, https=False,
     # Process optional parameters
     query_string = ''
     if default:
-        query_string = '?d=%s' % urllib.quote_plus(default)
+        query_string = '?d=%s' % urllib.quote_plus(str(default))
     if size:
+        try:
+            size = int(size)
+        except ValueError:
+            return query_string  # invalid size, skip
+
         if len(query_string) > 0:
             query_string += '&'
         else:
