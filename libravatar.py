@@ -154,6 +154,15 @@ def lookup_avatar_server(domain, https):
 
         records.append(srv_record)
 
+    return normalized_target(records, https)
+
+
+def normalized_target(records, https):
+    """
+    Pick the right server to use and return its normalized hostname
+    (i.e. only include the port number if it's necessary).
+    """
+
     target, port = sanitize_target(srv_hostname(records))
 
     if target and ((https and port != 443) or (not https and port != 80)):

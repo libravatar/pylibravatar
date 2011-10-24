@@ -1,7 +1,7 @@
 from nose.tools import eq_
 import random
 
-from libravatar import sanitize_target, srv_hostname, service_name
+from libravatar import sanitize_target, srv_hostname, service_name, normalized_target
 
 def test_sanitize_target():
     # normal responses
@@ -76,3 +76,28 @@ def test_service_name():
     eq_(service_name('example.com', False), '_avatars._tcp.example.com')
     eq_(service_name('example.org', True), '_avatars-sec._tcp.example.org')
     eq_(service_name('example.co.nz', False), '_avatars._tcp.example.co.nz')
+
+def test_normalized_target():
+    # missing params
+    eq_(normalized_target([{'target': 'avatars.example.com', 'port': None}], False),
+        None)
+    eq_(normalized_target([{'target': None, 'port': 80}], False),
+        None)
+    eq_(normalized_target([{'target': None, 'port': None}], True),
+        None)
+
+    # normal cases
+    eq_(normalized_target([{'target': 'example.com', 'port': 80}], False),
+        'example.com')
+    eq_(normalized_target([{'target': 'example.org', 'port': 443}], True),
+        'example.org')
+    eq_(normalized_target([{'target': 'example.com', 'port': 8080}], False),
+        'example.com:8080')
+    eq_(normalized_target([{'target': 'example.com', 'port': 3000}], True),
+        'example.com:3000')
+
+    # weird but valid cases
+    eq_(normalized_target([{'target': 'example.com', 'port': 80}], True),
+        'example.com:80')
+    eq_(normalized_target([{'target': 'example.org', 'port': 443}], False),
+        'example.org:443')
