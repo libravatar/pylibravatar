@@ -31,6 +31,8 @@ from urlparse import urlsplit, urlunsplit
 
 BASE_URL = 'http://cdn.libravatar.org/avatar/'
 SECURE_BASE_URL = 'https://seccdn.libravatar.org/avatar/'
+SERVICE_BASE = '_avatars._tcp'
+SECURE_SERVICE_BASE = '_avatars-sec._tcp'
 MIN_AVATAR_SIZE = 1
 MAX_AVATAR_SIZE = 512
 
@@ -98,6 +100,20 @@ def compose_avatar_url(delegation_server, avatar_hash, query_string, https):
     return base_url + avatar_hash + query_string
 
 
+def service_name(domain, https):
+    """
+    Return the DNS service to query for a given domain and scheme.
+    """
+
+    if not domain:
+        return None
+
+    if https:
+        return "%s.%s" % (SECURE_SERVICE_BASE, domain)
+    else:
+        return "%s.%s" % (SERVICE_BASE, domain)
+
+
 def lookup_avatar_server(domain, https):
     """
     Extract the avatar server from an SRV record in the DNS zone
@@ -108,15 +124,10 @@ def lookup_avatar_server(domain, https):
        _avatars-sec._tcp.example.com. IN SRV 0 0 443 avatars.example.com
     """
 
-    service_name = None
-    if https:
-        service_name = "_avatars-sec._tcp.%s" % domain
-    else:
-        service_name = "_avatars._tcp.%s" % domain
-
     DNS.DiscoverNameServers()
     try:
-        dns_request = DNS.Request(name=service_name, qtype='SRV').req()
+        dns_request = DNS.Request(name=service_name(domain, https),
+                                  qtype='SRV').req()
     except DNS.DNSError as message:
         print "DNS Error: %s" % message
         return None

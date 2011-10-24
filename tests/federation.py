@@ -1,7 +1,7 @@
 from nose.tools import eq_
 import random
 
-from libravatar import sanitize_target, srv_hostname
+from libravatar import sanitize_target, srv_hostname, service_name
 
 def test_sanitize_target():
     # normal responses
@@ -70,3 +70,9 @@ def test_srv_hostname():
                       {'target': 'e.example.org', 'port': 85, 'priority': 10, 'weight': 50},
                       {'target': 'f.example.org', 'port': 86, 'priority': 20, 'weight': 0}]),
         ('e.example.org', 85))
+
+def test_service_name():
+    eq_(service_name(None, False), None)
+    eq_(service_name('example.com', False), '_avatars._tcp.example.com')
+    eq_(service_name('example.org', True), '_avatars-sec._tcp.example.org')
+    eq_(service_name('example.co.nz', False), '_avatars._tcp.example.co.nz')
