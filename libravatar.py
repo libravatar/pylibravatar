@@ -51,9 +51,14 @@ def libravatar_url(email=None, openid=None, https=False,
     elif openid:
         # pylint: disable=E1103
         url = urlsplit(openid.strip())
-        lowercase_value = urlunsplit((url.scheme.lower(), url.netloc.lower(),
+        if url.username:
+            password = url.password or ''
+            netloc = url.username + ':' + password + '@' + url.hostname
+        else:
+            netloc = url.hostname
+        lowercase_value = urlunsplit((url.scheme.lower(), netloc,
                                       url.path, url.query, url.fragment))
-        domain = url.netloc
+        domain = url.hostname
         hash_obj = hashlib.new('sha256')
 
     if not hash_obj:  # email and openid both missing
