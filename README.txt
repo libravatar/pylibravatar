@@ -22,7 +22,7 @@ following:
 
 Here are other options you can provide:
 
-    >>> url = libravatar_url(openid = 'http://example.org/id/Bob', https = 1, size = 96, default = 'mm')
+    >>> url = libravatar_url(openid = 'http://example.org/id/Bob', https = True, size = 96, default = 'mm')
 
 See the [Libravatar documentation](http://wiki.libravatar.org/api) for more
 information on the special values for the "default" parameter.
