@@ -242,7 +242,7 @@ def srv_hostname(records):
             # ignore the record (srv_record has lower priority)
             continue
         elif srv_record['priority'] < top_priority:
-            # reset the asrv_recorday (srv_record has higher priority)
+            # reset the array (srv_record has higher priority)
             top_priority = srv_record['priority']
             total_weight = 0
             priority_records = []
