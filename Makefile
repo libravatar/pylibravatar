@@ -2,7 +2,13 @@ test: pep8 pyflakes lint
 	nosetests tests/*.py
 
 clean:
-	rm -rf dist/ MANIFEST
+	python-coverage -e
+	rm -rf dist/ MANIFEST htmlcov/
+
+coverage:
+	python-coverage run /usr/bin/nosetests tests/*.py 2> /dev/null
+	@python-coverage report -m | grep "^libravatar"
+	@python-coverage html
 
 dist: test
 	python setup.py sdist
