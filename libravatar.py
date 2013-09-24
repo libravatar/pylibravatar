@@ -31,6 +31,7 @@ import re
 
 try:
     # Python-3.x
+    # pylint: disable=F0401,E0611
     from urllib.parse import urlsplit, urlunsplit
     from urllib.parse import quote_plus
 except ImportError:
