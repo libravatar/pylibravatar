@@ -8,7 +8,7 @@ else:
 
 setup(
     name = 'pyLibravatar',
-    version = '1.5',
+    version = '1.6',
     description = 'Python module for Libravatar',
     author = 'Francois Marier',
     author_email = 'francois@libravatar.org',

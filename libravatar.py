@@ -1,7 +1,7 @@
 """
 pyLibravatar Python module for Libravatar
 
-Copyright (C) 2011 Francois Marier <francois@libravatar.org>
+Copyright (C) 2011, 2013 Francois Marier <francois@libravatar.org>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to
