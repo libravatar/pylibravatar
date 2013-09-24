@@ -1,4 +1,10 @@
 from distutils.core import setup
+import sys
+
+if sys.version_info[0] < 3:
+    requires = ['pydns']
+else:
+    requires = ['py3dns']
 
 setup(
     name = 'pyLibravatar',
@@ -10,7 +16,7 @@ setup(
     py_modules = ['libravatar'],
     license = 'MIT',
     keywords = ['libravatar', 'avatars', 'autonomous', 'social', 'federated'],
-    requires = ['pydns'],
+    requires = requires,
     classifiers = [
         "Programming Language :: Python",
         "Development Status :: 5 - Production/Stable",
@@ -19,6 +25,8 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
         "Topic :: Software Development :: Libraries :: Python Modules",
+        "Programming Language :: Python :: 2",
+        "Programming Language :: Python :: 3",
         ],
     long_description = """\
 PyLibravatar is an easy way to make use of the federated `Libravatar`_

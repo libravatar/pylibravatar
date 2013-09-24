@@ -22,12 +22,22 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 IN THE SOFTWARE.
 """
 
+from __future__ import print_function
+
 import DNS
 import hashlib
 import random
 import re
-import urllib
-from urlparse import urlsplit, urlunsplit
+
+try:
+    # Python-3.x
+    from urllib.parse import urlsplit, urlunsplit
+    from urllib.parse import quote_plus
+except ImportError:
+    # Python-2.x
+    from urlparse import urlsplit, urlunsplit
+    from urllib import quote_plus
+
 
 BASE_URL = 'http://cdn.libravatar.org/avatar/'
 SECURE_BASE_URL = 'https://seccdn.libravatar.org/avatar/'
@@ -58,7 +68,7 @@ def parse_options(default, size):
 
     query_string = ''
     if default:
-        query_string = '?d=%s' % urllib.quote_plus(str(default))
+        query_string = '?d=%s' % quote_plus(str(default))
     if size:
         try:
             size = int(size)
@@ -102,7 +112,7 @@ def parse_user_identity(email, openid):
     if not hash_obj:  # email and openid both missing
         return (None, None)
 
-    hash_obj.update(lowercase_value)
+    hash_obj.update(lowercase_value.encode('utf-8'))
     return (hash_obj.hexdigest(), domain)
 
 
@@ -156,7 +166,7 @@ def lookup_avatar_server(domain, https):
         dns_request = DNS.Request(name=service_name(domain, https),
                                   qtype='SRV').req()
     except DNS.DNSError as message:
-        print "DNS Error: %s" % message
+        print("DNS Error: %s" % message)
         return None
 
     if 'NXDOMAIN' == dns_request.header['status']:
@@ -164,7 +174,7 @@ def lookup_avatar_server(domain, https):
         return None
 
     if dns_request.header['status'] != 'NOERROR':
-        print "DNS Error: status=%s" % dns_request.header['status']
+        print("DNS Error: status=%s" % dns_request.header['status'])
         return None
 
     records = []
@@ -269,5 +279,5 @@ def srv_hostname(records):
         if weighted_index >= random_number:
             return (srv_record['target'], srv_record['port'])
 
-    print 'There is something wrong with our SRV weight ordering algorithm'
+    print('There is something wrong with our SRV weight ordering algorithm')
     return (None, None)
