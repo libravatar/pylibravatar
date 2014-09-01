@@ -180,7 +180,7 @@ def lookup_avatar_server(domain, https):
 
     records = []
     for answer in dns_request.answers:
-        if (not 'data' in answer) or (not answer['data']):
+        if ('data' not in answer) or (not answer['data']):
             continue
         if (not answer['typename']) or (answer['typename'] != 'SRV'):
             continue
@@ -219,7 +219,7 @@ def sanitize_target(args):
     if not target or not port:
         return (None, None)
 
-    if not re.match('^[0-9a-zA-Z\-.]+$', str(target)):
+    if not re.match('^[0-9a-zA-Z.-]+$', str(target)):
         return (None, None)
 
     try:

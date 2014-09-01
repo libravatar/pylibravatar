@@ -20,7 +20,7 @@ pyflakes:
 	pyflakes libravatar.py
 
 lint:
-	pylint --reports=no --include-ids=yes --disable=I0011 libravatar.py
+	pylint --reports=no --disable=I0011 libravatar.py
 
 upload: dist
 	python setup.py sdist upload --sign
