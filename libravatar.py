@@ -165,7 +165,7 @@ def lookup_avatar_server(domain, https):
     DNS.DiscoverNameServers()
     try:
         dns_request = DNS.Request(name=service_name(domain, https),
-                                  qtype='SRV').req()
+                                  qtype='SRV', protocol='tcp').req()
     except DNS.DNSError as message:
         print("DNS Error: %s" % message)
         return None
