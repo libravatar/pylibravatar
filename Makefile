@@ -1,3 +1,5 @@
+VERSION := $(shell grep "version =" setup.py | perl -pe 's/^.+?([0-9.]+).,$$/$$1/g')
+
 test: pep8 pyflakes lint
 	nosetests tests/*.py
 
@@ -11,6 +13,8 @@ coverage:
 	@python-coverage html
 
 dist: test
+	bzr commit -m "Bump version and changelog for release"
+	bzr tag pylibravatar-$(VERSION)
 	python setup.py sdist
 
 pep8:
@@ -22,5 +26,5 @@ pyflakes:
 lint:
 	pylint --reports=no --disable=I0011 libravatar.py
 
-upload: dist
+upload:
 	python setup.py sdist upload --sign

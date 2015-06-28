@@ -1,0 +1,5 @@
+- bump the version number in `setup.py`
+- add an entry to `Changelog.txt`
+- build a new tarball: `make dist`
+- upload to PyPI: `make upload`
+- push the branch and tag: `bzr push`
