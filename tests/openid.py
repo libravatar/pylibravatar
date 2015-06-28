@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from nose.tools import eq_
 
 from libravatar import libravatar_url, parse_user_identity
@@ -7,6 +8,9 @@ COMMON_OPENID = 'http://example.com/id'
 COMMON_DOMAIN = 'example.com'
 COMMON_PREFIX_HTTP  = 'http://cdn.libravatar.org/avatar/'
 COMMON_PREFIX_HTTPS = 'https://seccdn.libravatar.org/avatar/'
+
+UTF8_URL = u'http://example.com/François'
+UTF8_HASH = '5c323abb04553a28f44490b21effdf8f4a9878d07775c9a3c3f4a9ec9a95ff33'
 
 def test_simple_url():
     eq_(libravatar_url(openid = COMMON_OPENID),
@@ -28,6 +32,10 @@ def test_openid_hashing():
         COMMON_PREFIX_HTTP + '43e813cfff429662436728ef4fb1cc12bcf20414cab78811137f7d718c1ddedb')
     eq_(libravatar_url(openid = 'http://example.com/ID'),
         COMMON_PREFIX_HTTP + 'ad8ce775cc12cba9bb8af26e00f55c473a3fcd3f554595a5ad9dd924a546a448')
+
+    # UTF-8 in URLs
+    eq_(libravatar_url(openid = UTF8_URL), COMMON_PREFIX_HTTP + UTF8_HASH)
+    eq_(libravatar_url(openid = UTF8_URL, https = True), COMMON_PREFIX_HTTPS + UTF8_HASH)
 
 def test_other_params():
     eq_(libravatar_url(openid = COMMON_OPENID, default = '/local.png'),
