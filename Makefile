@@ -1,6 +1,6 @@
 VERSION := $(shell grep "version =" setup.py | perl -pe 's/^.+?([0-9.]+).,$$/$$1/g')
 
-test: pep8 pyflakes lint
+test: pep8 pep257 pyflakes lint
 	nosetests tests/*.py
 
 clean:
@@ -19,6 +19,9 @@ dist: test
 
 pep8:
 	pep8 libravatar.py
+
+pep257:
+	pep257 libravatar.py
 
 pyflakes:
 	pyflakes libravatar.py

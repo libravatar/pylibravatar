@@ -1,5 +1,8 @@
 """
-pyLibravatar Python module for Libravatar
+pyLibravatar - Python module for Libravatar.
+
+Easy way to make use of the federated Libravatar.org avatar hosting service
+from within your Python applications.
 
 Copyright (C) 2011, 2013, 2015 Francois Marier <francois@libravatar.org>
 
@@ -50,10 +53,7 @@ MAX_AVATAR_SIZE = 512
 
 def libravatar_url(email=None, openid=None, https=False,
                    default=None, size=None):
-    """
-    Return a URL to the appropriate avatar
-    """
-
+    """Return a URL to the appropriate avatar."""
     avatar_hash, domain = parse_user_identity(email, openid)
     query_string = parse_options(default, size)
 
@@ -63,10 +63,7 @@ def libravatar_url(email=None, openid=None, https=False,
 
 
 def parse_options(default, size):
-    """
-    Turn optional parameters into a query string.
-    """
-
+    """Turn optional parameters into a query string."""
     query_string = ''
     if default:
         query_string = '?d=%s' % quote_plus(str(default))
@@ -88,10 +85,10 @@ def parse_options(default, size):
 
 def parse_user_identity(email, openid):
     """
-    Generate user hash based on the email address or OpenID and return
-    it along with the relevant domain.
-    """
+    Generate user hash based on the email address or OpenID.
 
+    The hash will be returned along with the relevant domain.
+    """
     hash_obj = None
     if email:
         lowercase_value = email.strip().lower()
@@ -118,10 +115,7 @@ def parse_user_identity(email, openid):
 
 
 def compose_avatar_url(delegation_server, avatar_hash, query_string, https):
-    """
-    Assemble the final avatar URL based on the provided components.
-    """
-
+    """Assemble the final avatar URL based on the provided components."""
     avatar_hash = avatar_hash or ''
     query_string = query_string or ''
 
@@ -139,10 +133,7 @@ def compose_avatar_url(delegation_server, avatar_hash, query_string, https):
 
 
 def service_name(domain, https):
-    """
-    Return the DNS service to query for a given domain and scheme.
-    """
-
+    """Return the DNS service to query for a given domain and scheme."""
     if not domain:
         return None
 
@@ -154,14 +145,13 @@ def service_name(domain, https):
 
 def lookup_avatar_server(domain, https):
     """
-    Extract the avatar server from an SRV record in the DNS zone
+    Extract the avatar server from an SRV record in the DNS zone.
 
     The SRV records should look like this:
 
        _avatars._tcp.example.com.     IN SRV 0 0 80  avatars.example.com
        _avatars-sec._tcp.example.com. IN SRV 0 0 443 avatars.example.com
     """
-
     DNS.DiscoverNameServers()
     try:
         dns_request = DNS.Request(name=service_name(domain, https),
@@ -197,10 +187,11 @@ def lookup_avatar_server(domain, https):
 
 def normalized_target(records, https):
     """
-    Pick the right server to use and return its normalized hostname
-    (i.e. only include the port number if it's necessary).
-    """
+    Pick the right server to use and return its normalized hostname.
 
+    The hostname will be returned but the port number will be omitted
+    unless it's non-standard.
+    """
     target, port = sanitize_target(srv_hostname(records))
 
     if target and ((https and port != 443) or (not https and port != 80)):
@@ -210,10 +201,7 @@ def normalized_target(records, https):
 
 
 def sanitize_target(args):
-    """
-    Ensure we are getting a (mostly) valid hostname and port number
-    from the DNS resolver.
-    """
+    """Ensure we are getting a valid hostname and port from DNS resolver."""
     target, port = args
 
     if not target or not port:
@@ -232,10 +220,7 @@ def sanitize_target(args):
 
 
 def srv_hostname(records):
-    """
-    Return the right (target, port) pair from a list of SRV records.
-    """
-
+    """Return the right (target, port) pair from a list of SRV records."""
     if len(records) < 1:
         return (None, None)
 
