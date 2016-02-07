@@ -160,6 +160,10 @@ def lookup_avatar_server(domain, https):
         print("DNS Error: %s" % message)
         return None
 
+    if dns_request is None:
+        # No servers discovered?
+        return None
+
     if 'NXDOMAIN' == dns_request.header['status']:
         # Not an error, but no point in going any further
         return None
