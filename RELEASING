@@ -4,7 +4,8 @@ Release Process for pyLibravatar
 1. Bump the version number in `pyproject.toml`
 2. Ensure all tests pass: `python -m pytest tests/`
 3. Run pre-commit checks: `pre-commit run --all-files`
-4. Build the distribution: `python -m build`
-5. Upload to PyPI: `twine upload dist/*`
-6. Push the branch and create a git tag: `git push && git tag vX.Y.Z && git push --tags`
-7. Create a GitHub release with release notes
+4. Install build tools: `pip install build twine`
+5. Build the distribution: `python -m build`
+6. Upload to PyPI: `twine upload dist/*`
+7. Push the branch and create a git tag: `git push && git tag vX.Y.Z && git push --tags`
+8. Create a GitHub release with release notes

@@ -7,7 +7,7 @@ name = "pyLibravatar"
 version = "2.0.0"
 description = "Python module for Libravatar"
 readme = "README.md"
-license = {text = "MIT"}
+license = "MIT"
 authors = [
     {name = "Francois Marier", email = "francois@libravatar.org"},
     {name = "Oliver Falk", email = "oliver@linux-kernel.at"},
@@ -19,7 +19,6 @@ keywords = ["libravatar", "avatars", "autonomous", "social", "federated"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
@@ -39,7 +38,7 @@ Homepage = "https://github.com/libravatar/pylibravatar"
 Repository = "https://github.com/libravatar/pylibravatar"
 
 [project.optional-dependencies]
-dev = ["pytest", "mypy"]
+dev = ["pytest", "mypy", "build", "twine"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
