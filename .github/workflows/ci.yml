@@ -28,7 +28,7 @@ jobs:
         mypy libravatar.py tests/
     - name: Run tests
       run: |
-        pytest tests/
+        pytest tests/*.py
     - name: Run pre-commit
       run: |
         pip install pre-commit
