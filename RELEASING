@@ -1,5 +1,10 @@
-- bump the version number in `setup.py`
-- add an entry to `Changelog.txt`
-- build a new tarball: `make dist`
-- upload to PyPI: `make upload`
-- push the branch and tag: `bzr push`
+Release Process for pyLibravatar
+================================
+
+1. Bump the version number in `pyproject.toml`
+2. Ensure all tests pass: `python -m pytest tests/`
+3. Run pre-commit checks: `pre-commit run --all-files`
+4. Build the distribution: `python -m build`
+5. Upload to PyPI: `twine upload dist/*`
+6. Push the branch and create a git tag: `git push && git tag vX.Y.Z && git push --tags`
+7. Create a GitHub release with release notes
