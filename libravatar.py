@@ -30,9 +30,10 @@ import hashlib
 import random
 import re
 import urllib.parse
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union, cast
 
 import dns.resolver
+from dns.rdtypes.IN.SRV import SRV
 
 BASE_URL = "http://cdn.libravatar.org/avatar/"
 SECURE_BASE_URL = "https://seccdn.libravatar.org/avatar/"
@@ -177,11 +178,12 @@ def lookup_avatar_server(domain: Optional[str], https: bool) -> Optional[str]:
 
     records = []
     for rdata in answers:
+        srv_rdata = cast(SRV, rdata)
         srv_record = {
-            "priority": rdata.priority,
-            "weight": rdata.weight,
-            "port": rdata.port,
-            "target": str(rdata.target),
+            "priority": srv_rdata.priority,
+            "weight": srv_rdata.weight,
+            "port": srv_rdata.port,
+            "target": str(srv_rdata.target),
         }
 
         records.append(srv_record)
