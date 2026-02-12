@@ -218,7 +218,7 @@ def sanitize_target(
         return (None, None)
 
     # Strip trailing dot from DNS responses (FQDN format)
-    target = str(target).rstrip('.')
+    target = str(target).rstrip(".")
 
     if not re.match("^[0-9a-zA-Z.-]+$", target):
         return (None, None)
