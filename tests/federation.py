@@ -16,6 +16,12 @@ def test_sanitize_target() -> None:
         "avatars.example.org",
         8080,
     )
+    # DNS responses with trailing dot (FQDN format)
+    assert sanitize_target(("example.com.", 80)) == ("example.com", 80)
+    assert sanitize_target(("avatars.linux-kernel.at.", 443)) == (
+        "avatars.linux-kernel.at",
+        443,
+    )
 
     # invalid responses
     assert sanitize_target(("example.com", "abc")) == (None, None)
@@ -253,17 +259,13 @@ def test_service_name() -> None:
     assert service_name(None, False) is None
     assert service_name("example.com", False) == "_avatars._tcp.example.com"
     assert service_name("example.org", True) == "_avatars-sec._tcp.example.org"
-    assert (
-        service_name("example.co.nz", False) == "_avatars._tcp.example.co.nz"
-    )
+    assert service_name("example.co.nz", False) == "_avatars._tcp.example.co.nz"
 
 
 def test_normalized_target() -> None:
     # missing params
     assert (
-        normalized_target(
-            [{"target": "avatars.example.com", "port": None}], False
-        )
+        normalized_target([{"target": "avatars.example.com", "port": None}], False)
         is None
     )
     assert normalized_target([{"target": None, "port": 80}], False) is None

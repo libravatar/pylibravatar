@@ -217,7 +217,10 @@ def sanitize_target(
     if not target or not port:
         return (None, None)
 
-    if not re.match("^[0-9a-zA-Z.-]+$", str(target)):
+    # Strip trailing dot from DNS responses (FQDN format)
+    target = str(target).rstrip('.')
+
+    if not re.match("^[0-9a-zA-Z.-]+$", target):
         return (None, None)
 
     try:
